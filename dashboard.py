@@ -10,7 +10,7 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-from db import get_connection, get_all_budgets, get_category_spend, get_monthly_summary, get_transactions
+from db import get_connection, get_all_budgets, get_category_spend, get_monthly_summary, get_transactions, upsert_budget
 from demo_data import seed_demo_data
 
 
@@ -201,13 +201,13 @@ if not df.empty:
 else:
     st.info("No transactions found for the selected month.")
 
-    st.subheader("Budget Progress")
-    if budgets:
-        with closing(get_connection(DB_PATH)) as conn:
-            for category, budget in budgets.items():
-                spend = get_category_spend(conn, category, selected_month, selected_year)
-                pct = 0 if budget == 0 else spend / budget * 100
-                st.write(f"**{category}** - {format_rm(spend)} spent of {format_rm(budget)} budget ({pct:.0f}%)")
-                st.progress(min(pct / 100, 1.0), text=f"{category}: {pct:.0f}%")
-    else:
-        st.info("No budgets have been set yet.")
+st.subheader("Budget Progress")
+if budgets:
+    with closing(get_connection(DB_PATH)) as conn:
+        for category, budget in budgets.items():
+            spend = get_category_spend(conn, category, selected_month, selected_year)
+            pct = 0 if budget == 0 else spend / budget * 100
+            st.write(f"**{category}** - {format_rm(spend)} spent of {format_rm(budget)} budget ({pct:.0f}%)")
+            st.progress(min(pct / 100, 1.0), text=f"{category}: {pct:.0f}%")
+else:
+    st.info("No budgets have been set yet.")
