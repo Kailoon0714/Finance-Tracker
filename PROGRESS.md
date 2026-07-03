@@ -23,3 +23,10 @@
 - Tested: Streamlit server launched successfully and responded on `http://localhost:8501` with HTTP 200.
 - Tested: Backing data verified for all dashboard panels, including monthly summaries for May, June, and July 2026, category coverage, and budget records.
 - Next: Move to Phase 4 and build the Flask relay API for Railway deployment.
+
+## Phase 4
+- Built: `relay/` Flask API with `/health`, `/notify`, `/pending`, and `/processed` endpoints plus SQLite queue helpers.
+- Built: `relay/Procfile` and `relay/requirements.txt` for Railway deployment.
+- Built: `relay_smoke_test.py` covering auth, notification insert, pending fetch, processed updates, and error handling.
+- Tested: `relay_smoke_test.py` passed locally; `py_compile` passed for `relay/app.py`, `relay/db.py`, and `relay_smoke_test.py`.
+- Next: Deploy the relay as a separate Railway service and wire the laptop poller in Phase 5.
